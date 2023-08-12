@@ -1,0 +1,29 @@
+<div id="carts" class="uk-child-width-1-4@m" uk-grid>
+    {{#each carts}}
+      <div id="{{this._id}}">
+        <div class="uk-card uk-card-default">
+          <div class="uk-card-body">
+            <h3 class="uk-card-title">{{this.title}}</h3>
+             {{#if this.thumbnail}}
+            <img src="{{this.thumbnail}}" alt="imagen">
+              {{else}}
+            <p>Imagen no disponible</p>
+              {{/if}}
+                <img {{this.thumbnail}} alt="img">
+                <h5>ARG ${{this.price}}</h5>
+                <p>{{this.description}}</p>
+                <p>{{this.stock}}</p>
+          </div>
+        </div>
+      </div>
+    {{/each}}
+</div>
+
+
+
+
+
+
+
+
+    

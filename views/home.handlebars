@@ -1,0 +1,32 @@
+<div class="uk-padding-large uk-child-width-1-1" uk-grid>
+  {{#if pageInfo.hasPrevPage}}
+      <a href={{pageInfo.prevLink}}><< Anterior</a>
+  {{/if}}
+  &nbsp;
+  {{pageInfo.page}}
+  &nbsp;
+    {{#if pageInfo.hasNextPage}}
+      <a href={{pageInfo.nextLink}}>Siguiente >></a>
+  {{/if}} 
+</div>
+<div id="products" class="uk-child-width-1-4@m" uk-grid>
+    {{#each products}}
+    <div>
+        <div class="uk-card uk-card-default">
+             {{#if this.thumbnail}}
+                <img src="{{this.thumbnail}}" alt="imagen">
+                {{else}}
+                <p>Imagen no disponible</p>
+                {{/if}}
+            <div class="uk-card-body">
+                <h3 class="uk-card-title">{{this.title}}</h3>
+                <h5>ARG ${{this.price}}</h5>
+                <p>{{this.description}}</p>
+                <p>{{this.code}}</p>
+                <p>{{this.stock}}</p>
+                <button class="uk-button uk-button-secondary uk-button-small">Agregar al carrito</button>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</div>

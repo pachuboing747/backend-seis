@@ -1,0 +1,134 @@
+<div>
+  <div class="formulario">
+    <form id="createProductForm">
+      <p>
+      <label for="productName">Title:</label>
+      <input type="text" id="productName" required>
+      </p><p>
+      <label for="productDescription">Description:</label>
+      <input type="text" id="productDescription" required>
+      </p><p>
+      <label for="productPrice">Price:</label>
+      <input type="number" id="productPrice" required>
+      </p><p>
+      <label for="productCode">Code:</label>
+      <input type="text" id="productCode" required>
+      </p><p>
+      <label for="productStock">Stock:</label>
+      <input type="number" id="productStock" required>
+      </p><p>
+      <div>
+        <button type="button" id="createProductBtn">Crear Producto</button>
+      </div>
+      <br>
+      <div>
+
+        <button type="button" id="deleteProductsBtn">Eliminar Productos</button>
+      </div>
+    </form>
+  </div>
+  <div id="realTimesProducts" class="uk-child-width-1-4@m" uk-grid>
+      {{#each products}}
+    <div>
+        <div class="uk-card uk-card-default">
+          <div class="uk-card-media-top">
+          </div>
+          <div class="uk-card-body">
+           {{#if this.thumbnail}}
+            <img src="{{this.thumbnail}}" alt="imagen">
+            {{else}}
+          <p>Imagen no disponible</p>
+            {{/if}}
+            <h3 class="uk-card-title">{{this.title}}</h3>
+              <p>{{this.description}}</p>
+            <h5>ARG ${{this.price}}</h5>
+            <p>{{this.code}}</p>
+            <p>{{this.stock}}</p>
+    
+          </div>
+        </div>
+      </div>
+      {{/each}}
+
+  </div>
+
+  <script>
+  async function addProduct(event) {
+  const productName = document.getElementById("productName").value;
+  const productDescription = document.getElementById("productDescription").value;
+  const productPrice = document.getElementById("productPrice").value;
+  const productCode = document.getElementById("productCode").value;
+  const productStock = document.getElementById("productStock").value;
+
+  const response = await fetch("api/products/addProduct", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      title: productName,
+      description: productDescription,
+      price: productPrice,
+      code: productCode,
+      stock: productStock,
+    }),
+  });
+
+    if (response.ok) {
+      console.log(`elemento agregado ${productName}-${productDescription}${productPrice}-${productCode}-${productStock}`);
+    } else {
+      console.error("Error al agregar el producto");
+    }
+  }
+
+
+  async function updateProductList() {
+    try {
+      const response = await fetch("api/products/getProducts");
+      if (response.ok ) {
+        const products = await response.json();
+        const productList = document.getElementById("productList");
+        productList.innerHTML = "";
+
+        if (products.length > 0) {
+          products.forEach((product) => {
+            const li = document.createElement("li");
+            li.textContent = `Nombre: ${product.title}, Precio: $${product.price}`;
+            productList.appendChild(li);
+          });
+        } else {
+          const li = document.createElement("li");
+          li.textContent = "Carrito vacío. Agrega productos para verlos aquí.";
+          productList.appendChild(li);
+        }
+      }
+    } catch (error) {
+      console.log("Error al obtener la lista de productos en el carrito:");
+      const productList = document.getElementById("productList");
+      productList.innerHTML = "";
+
+      const li = document.createElement("li");
+      li.textContent = "Error al obtener la lista de productos. Inténtalo nuevamente.";
+      productList.appendChild(li);
+    }
+}
+
+  async function deleteProducts() {
+    const response = await fetch("api/products/deleteProducts", {
+    method: "POST",
+    });
+
+      if (response.ok) {
+        console.log("producto eliminado exitosamente");
+      } else {
+        console.error("Error al eliminar los productos");
+      }
+    }
+
+  document.getElementById("createProductBtn").addEventListener("click", addProduct);
+  document.getElementById("deleteProductsBtn").addEventListener("click", deleteProducts);
+  </script>
+</div>
+
+
+
